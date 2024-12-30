@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include("./partials/head") %>
+    <title><%= blog.title %></title>
+  </head>
+  <body>
+    <%- include("./partials/nav") %>
+    <div class="container mt-4">
+      <h1 class="display-1 mt-4 text-center"><%= blog.title %></h1>
+
+      <div class="row justify-content-md-center">
+        <div class="col-md-auto">
+          <img
+            src="<%= blog.createdBy.profileImageUrl %>"
+            class="rounded-circle mb-3"
+            style="width: 40px"
+            alt="Avatar"
+          />
+        </div>
+        <div class="col-md-auto">
+          <p class="text-center fs-6">by <%= blog.createdBy.fullName %></p>
+        </div>
+      </div>
+
+      <div class="text-center mt-4 mb-4">
+        <img
+          src="<%= blog.coverImage %>"
+          class="rounded mx-auto d-block"
+          alt="..."
+        />
+      </div>
+      <p class="lead normal"><%= blog.body %></p>
+    </div>
+    <div class="container mt-4">
+      <h1 class="display-6 mt-4 mb-4 text-center">
+        Comments (<%= locals.comments.length %>)
+      </h1>
+      <% if (locals.user) { %>
+      <form action="/blog/comment/<%= blog._id%>" method="POST">
+        <input type="hidden" name="blogId" value="<%= blog._id %>" />
+        <div class="mb-3">
+          <input
+            type="text"
+            name="content"
+            class="form-control"
+            placeholder="Enter your comment"
+          />
+          <button type="submit" class="btn btn-outline-primary mt-4">
+            Add comment
+          </button>
+        </div>
+      </form>
+      <% } %> <% if (locals.comments) { %> <% comments.forEach(comment => { %>
+      <div class="card mb-4">
+        <div class="card-body">
+          <p><%= comment.content %></p>
+          <div class="d-flex align-items-center">
+            <img
+              src="<%= comment.createdBy.profileImageUrl %>"
+              alt="avatar"
+              width="25"
+              height="25"
+            />
+            <p class="small mb-0 ms-2"><%= comment.createdBy.fullName%></p>
+          </div>
+        </div>
+      </div>
+      <% }); %> <% } %>
+    </div>
+    <%- include("./partials/scripts") %>
+  </body>
+</html>
